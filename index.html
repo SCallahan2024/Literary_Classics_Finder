@@ -19,6 +19,7 @@
             font-family: "Garamond", serif;
             font-weight: bold;
             font-size: 2em;
+            margin-bottom: 20px;
         }
 
         #books-container {
@@ -31,7 +32,7 @@
         }
 
         .book-item {
-            margin: 10px 0;
+            margin: 15px 0;
             padding: 10px;
             border-bottom: 1px solid #ddd;
         }
@@ -75,17 +76,17 @@
     <div id="recommendations"></div>
 
     <script>
-        let selectedBooks = []; // Store selected books for rating
-        let allBooks = [];      // Store all books to find recommendations
-        let ratedTitles = new Set(); // Track titles of books already rated
-        let genreCount = {};    // Cumulative genre count for recommendations
+        let selectedBooks = []; // Stores the current 10 random books
+        let allBooks = [];      // Stores all books for generating recommendations
+        let ratedTitles = new Set(); // Tracks titles of books that have been rated
+        let genreCount = {};     // Cumulative genre count for recommendations
 
-        // Fetches the book data, selects 10 random books, and displays them with rating options
+        // Fetches all books from literary-classics.json and loads the first set of 10 books
         async function fetchBooks() {
             try {
                 const response = await fetch('./literary-classics.json');
                 const books = await response.json();
-                allBooks = books;
+                allBooks = books; // Store all books for recommendations
                 loadRandomBooks();
             } catch (error) {
                 console.error("Failed to load book data:", error);
@@ -123,7 +124,7 @@
                         <label><input type="radio" name="rating-${index}" value="3"> 3</label>
                         <label><input type="radio" name="rating-${index}" value="4"> 4</label>
                         <label><input type="radio" name="rating-${index}" value="5"> 5</label>
-                        <label><input type="radio" name="rating-${index}" value="not-read"> Haven't read it</label>
+                        <label><input type="radio" name="rating-${index}" value="not-read"> Have not read it</label>
                     </div>
                 `;
 
@@ -131,48 +132,47 @@
             });
         }
 
-        // Processes ratings, tracks genres rated 3 or higher, and displays cumulative results
+        // Processes ratings, updates genre count, and displays the top three genres and recommendations
         function submitRatings() {
             const resultsDiv = document.getElementById('results');
+            const recommendationsDiv = document.getElementById('recommendations');
 
             selectedBooks.forEach((book, index) => {
                 const rating = document.querySelector(`input[name="rating-${index}"]:checked`);
                 if (rating && rating.value >= 3 && rating.value !== 'not-read') {
                     const genre = book.genre;
                     genreCount[genre] = (genreCount[genre] || 0) + 1;
-                    ratedTitles.add(book.title); // Mark book as rated
+                    ratedTitles.add(book.title); // Mark the book as rated
                 }
             });
 
-            // Display genre counts
-            resultsDiv.innerHTML = `<h2>Genres Rated 3 or Higher:</h2>`;
-            const list = document.createElement('ul');
-            for (const [genre, count] of Object.entries(genreCount)) {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${genre}: ${count}`;
-                list.appendChild(listItem);
-            }
+            // Display cumulative genre counts
+            resultsDiv.innerHTML = `<h2>Your Top 3 Genres:</h2>`;
+            const topGenres = Object.entries(genreCount)
+                .sort((a, b) => b[1] - a[1]) // Sort in descending order by count
+                .slice(0, 3); // Take the top 3 genres
 
-            if (Object.keys(genreCount).length === 0) {
+            const list = document.createElement('ul');
+            topGenres.forEach(([genre, count]) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${genre}: ${count} ratings of 3 or higher`;
+                list.appendChild(listItem);
+            });
+
+            if (topGenres.length === 0) {
                 resultsDiv.innerHTML = "No genres rated 3 or higher.";
             } else {
                 resultsDiv.appendChild(list);
             }
 
-            // Get top 3 genres and recommend books
-            recommendBooks();
+            // Generate recommendations based on the top 3 genres
+            recommendBooks(topGenres.map(genre => genre[0]));
         }
 
         // Recommends one book for each of the top 3 genres, excluding the ones already rated
-        function recommendBooks() {
+        function recommendBooks(topGenres) {
             const recommendationsDiv = document.getElementById('recommendations');
             recommendationsDiv.innerHTML = `<h2>Recommended Books Based on Your Top Genres:</h2>`;
-
-            // Sort genres by count and get the top 3
-            const topGenres = Object.entries(genreCount)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 3)
-                .map(entry => entry[0]); // Extract top genre names
 
             const recommendations = [];
 
@@ -185,6 +185,7 @@
                 }
             });
 
+            // Display the recommendations
             if (recommendations.length > 0) {
                 const recList = document.createElement('ul');
                 recommendations.forEach(book => {
