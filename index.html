@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Literary Classics Finder</title>
+    <style>
+        /* Main styling for a sophisticated, library-themed vibe */
+        body {
+            font-family: "Georgia", serif;
+            background-color: #f4f1ea;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #5a3d31;
+            font-family: "Garamond", serif;
+            font-weight: bold;
+            margin: 20px 0;
+            font-size: 2em;
+        }
+
+        /* Container styling with centered layout */
+        #books-container, #results, #recommendations {
+            margin: 20px auto;
+            max-width: 1000px;
+            padding: 20px;
+        }
+
+        .book-container {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #5a3d31;
+        }
+
+        .book-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2e2c2b;
+        }
+
+        .book-author, .book-year, .book-genre {
+            font-style: italic;
+            color: #4a3c31;
+        }
+
+        .rating {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #5a3d31;
+        }
+
+        /* Styling for the submit and refine buttons */
+        .submit-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 30px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #5a3d31;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: "Garamond", serif;
+        }
+        
+        .submit-btn:hover {
+            background-color: #3e2a20;
+        }
+
+        /* Results and recommendations sections styling */
+        .results, .recommendations {
+            text-align: center;
+            color: #5a3d31;
+            font-weight: bold;
+        }
+
+        .results ol, .recommendations ul {
+            list-style-type: none;
+            padding: 0;
+            font-family: "Garamond", serif;
+            color: #3e2a20;
+        }
+
+        .results li, .recommendations li {
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Literary Classics Finder</h1>
+    <div id="books-container"></div>
+    <button class="submit-btn" onclick="submitRatings()">Submit Ratings</button>
+    <button class="submit-btn" style="display:none;" id="rate-more-btn" onclick="rateMoreBooks()">Rate 10 More Books</button>
+    <div id="results" class="results"></div>
+    <div id="recommendations" class="recommendations"></div>
+
+    <script>
+        let allBooks = [];
+        let selectedBooks = [];
+        let ratedBooks = new Set();  // Tracks titles of previously rated books
+        let genreCount = {};  // Cumulative genre count
+
+        async function fetchBooks() {
+            const response = await fetch('./literary-classics.json');  // Updated to relative path
+            allBooks = await response.json();
+            displayRandomBooks();
+        }
+
+        function displayRandomBooks() {
+            const container = document.getElementById('books-container');
+            container.innerHTML = '';  // Clear previous books
+
+            // Filter out books that have already been rated
+            const unratedBooks = allBooks.filter(book => !ratedBooks.has(book.title));
+            selectedBooks = unratedBooks.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+            selectedBooks.forEach((book, index) => {
+                const bookDiv = document.createElement('div');
+                bookDiv.classList.add('book-container');
+
+                bookDiv.innerHTML = `
+                    <p class="book-title">${book.title}</p>
+                    <p class="book-author">by ${book.author}</p>
+                    <p class="book-year">(${book.year})</p>
+                    <p class="book-genre">Genre: ${book.genre}</p>
+                    <div class="rating">
+                        <label>
+                            <input type="radio" name="rating-${index}" value="1"> 1
+                        </label>
+                        <label>
+                            <input type="radio" name="rating-${index}" value="2"> 2
+                        </label>
+                        <label>
+                            <input type="radio" name="rating-${index}" value="3"> 3
+                        </label>
+                        <label>
+                            <input type="radio" name="rating-${index}" value="4"> 4
+                        </label>
+                        <label>
+                            <input type="radio" name="rating-${index}" value="5"> 5
+                        </label>
+                        <label>
+                            <input type="radio" name="rating-${index}" value="not-read"> Have not read it
+                        </label>
+                    </div>
+                `;
+                container.appendChild(bookDiv);
+            });
+        }
+
+        function submitRatings() {
+            for (let i = 0; i < selectedBooks.length; i++) {
+                const selectedRating = document.querySelector(`input[name="rating-${i}"]:checked`);
+                const ratingValue = selectedRating ? selectedRating.value : null;
+                const book = selectedBooks[i];
+
+                if (ratingValue && ratingValue >= 3 && ratingValue !== 'not-read') {
+                    genreCount[book.genre] = (genreCount[book.genre] || 0) + 1;
+                }
+
+                // Mark this book as rated
+                ratedBooks.add(book.title);
+            }
+
+            // Display top genres and recommendations
+            displayTopGenres();
+            document.getElementById('rate-more-btn').style.display = 'block';
+        }
+
+        function displayTopGenres() {
+            const genreEntries = Object.entries(genreCount);
+            genreEntries.sort((a, b) => b[1] - a[1]);
+
+            const topGenres = genreEntries.slice(0, 3);
+            const resultsDiv = document.getElementById('results');
+            if (topGenres.length > 0) {
+                resultsDiv.innerHTML = `
+                    <p>Top Genres Based on Your Ratings:</p>
+                    <ol>
+                        ${topGenres.map(genre => `<li>${genre[0]} - ${genre[1]} ratings</li>`).join('')}
+                    </ol>
+                `;
+                recommendBooks(topGenres.map(g => g[0]));
+            } else {
+                resultsDiv.innerHTML = "<p>No genres rated 3 or higher.</p>";
+            }
+        }
+
+        function recommendBooks(topGenres) {
+            const recommendationsDiv = document.getElementById('recommendations');
+            const ratedTitles = Array.from(ratedBooks);
+
+            let recommendations = [];
+            topGenres.forEach(genre => {
+                const genreRecommendations = allBooks.filter(book => book.genre === genre && !ratedTitles.includes(book.title));
+                if (genreRecommendations.length > 0) {
+                    recommendations.push(genreRecommendations[0]);  // Select the first available book in each top genre
+                }
+            });
+
+            if (recommendations.length > 0) {
+                recommendationsDiv.innerHTML = `
+                    <p>Book Recommendations Based on Your Top Genres:</p>
+                    <ul>
+                        ${recommendations.map(book => `<li><strong>${book.title}</strong> by ${book.author} (${book.year}) - ${book.genre}</li>`).join('')}
+                    </ul>
+                `;
+            } else {
+                recommendationsDiv.innerHTML = "<p>No recommendations available based on your ratings.</p>";
+            }
+        }
+
+        function rateMoreBooks() {
+            document.getElementById('recommendations').innerHTML = '';  // Clear previous recommendations
+            displayRandomBooks();
+        }
+
+        fetchBooks();
+    </script>
+</body>
+</html>
