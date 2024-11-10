@@ -15,7 +15,7 @@
         }
         .button-container {
             position: absolute;
-            top: 450px;
+            top: 650px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -23,8 +23,8 @@
             gap: 10px;
         }
         .button {
-            padding: 15px 25px;
-            font-size: 18px;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
@@ -102,9 +102,9 @@
             if (message) {
                 fill(50, 50, 50, 200);
                 noStroke();
-                rect(20, 20, width - 40, 160, 10);
+                rect(20, 20, width - 40, 140, 10);
                 fill(255);
-                textSize(22);
+                textSize(20);
                 textAlign(LEFT, TOP);
                 textWrap(WORD);
                 text(message, 40, 40, width - 80);
@@ -132,9 +132,7 @@
         function mousePressed() {
             // Primary castle interaction
             if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
-                message = 'The castle invites you to spend a fun day at the amusement park.
-
-You have $200 for incidentals to get your family of four (two adults and two children) through a day at the amusement park. Budget and spend wisely. Your first decision is whether or not to pay $35 for a special character photo as you enter through the central castle area.';
+                message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou have $200 for incidentals to get your family of four (two adults and two children) through a day at the amusement park. Budget and spend wisely. Your first decision is whether or not to pay $35 for a special character photo as you enter through the central castle area.';
                 options = [
                     { text: 'Yes, a pricey photo is a priceless memory!', action: () => adjustBudget(-35) },
                     { text: 'No, maybe I will splurge next time.', action: () => {} }
