@@ -20,6 +20,8 @@
     <script>
         let bg;
         let message = '';
+        let budget = 200;
+        let options = [];
 
         function preload() {
             bg = loadImage('theme-park.png');
@@ -83,6 +85,23 @@
                 textWrap(WORD);
                 text(message, 20, 20, width - 40);
             }
+
+            // Display choices if available
+            if (options.length > 0) {
+                fill(255);
+                stroke(0);
+                strokeWeight(3);
+                textSize(24);
+                textAlign(LEFT, TOP);
+                for (let i = 0; i < options.length; i++) {
+                    text(`${i + 1}. ${options[i].text}`, 20, 120 + i * 40);
+                }
+            }
+
+            // Display budget in the corner
+            fill(0);
+            textSize(20);
+            text(`Budget: $${budget}`, width - 150, 30);
         }
 
         function displayCoordinates() {
@@ -101,26 +120,46 @@
         function mousePressed() {
             // Primary castle interaction
             if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
-                message = 'The castle invites you to spend a fun day at the amusement park.';
+                message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou have $200 for incidentals to get your family of four (two adults and two children) through a day at the amusement park. Budget and spend wisely. Your first decision is whether or not to pay $35 for a special character photo as you enter through the central castle area.';
+                options = [
+                    { text: 'Yes, a pricey photo is a priceless memory!', action: () => adjustBudget(-35) },
+                    { text: 'No, maybe I will splurge next time.', action: () => {} }
+                ];
             }
             // Secondary castle interaction
             else if (mouseX > 150 && mouseX < 300 && mouseY > 200 && mouseY < 450) {
                 message = 'Sentimental goodies a plenty await you in the souvenir shop.';
+                options = [];
             }
             // Ferris wheel interaction
             else if (mouseX > 700 && mouseX < 900 && mouseY > 150 && mouseY < 450) {
                 message = 'The Ferris wheel allows riders to reach new heights.';
+                options = [];
             }
             // Carousel interaction
             else if (mouseX > 520 && mouseX < 750 && mouseY > 730 && mouseY < 950) {
                 message = 'The carousel spins whimsical nostalgia for adults and new adventure for kids.';
+                options = [];
             }
             // Restaurant interaction
             else if (mouseX > 800 && mouseX < 950 && mouseY > 750 && mouseY < 900) {
                 message = 'This culinary magic will satisfy every taste and appetite.';
+                options = [];
             } else {
                 message = '';
+                options = [];
             }
+        }
+
+        function keyPressed() {
+            if (options.length > 0 && key >= '1' && key <= String(options.length)) {
+                const index = int(key) - 1;
+                options[index].action();
+            }
+        }
+
+        function adjustBudget(amount) {
+            budget += amount;
         }
     </script>
 </body>
