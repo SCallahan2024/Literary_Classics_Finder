@@ -58,11 +58,18 @@
                 displayZoneName('Ferris Wheel');
             }
             
-            // Carousel interaction zone
-            if (mouseX > 350 && mouseX < 500 && mouseY > 650 && mouseY < 800) {
-                fill(255, 255, 0, 150);
-                rect(350, 650, 150, 150);
-                displayZoneName('Carousel');
+            // Carousel interaction zone (adjusted)
+            beginShape();
+            fill(255, 255, 0, 150);
+            vertex(515, 740);
+            vertex(730, 740);
+            vertex(750, 934);
+            vertex(550, 961);
+            endShape(CLOSE);
+            if (mouseX > 515 && mouseX < 730 && mouseY > 740 && mouseY < 961) {
+                if (isPointInPolygon(mouseX, mouseY, [[515, 740], [730, 740], [750, 934], [550, 961]])) {
+                    displayZoneName('Carousel');
+                }
             }
             
             // Restaurant interaction zone
@@ -77,14 +84,3 @@
             fill(0);
             textSize(36);
             text(`X: ${mouseX}, Y: ${mouseY}`, mouseX + 15, mouseY + 15);
-        }
-
-        function displayZoneName(zoneName) {
-            fill(0);
-            textSize(64);
-            textAlign(CENTER, CENTER);
-            text(zoneName, width / 2, height / 2);
-        }
-    </script>
-</body>
-</html>
