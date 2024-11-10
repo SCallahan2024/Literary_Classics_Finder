@@ -59,17 +59,15 @@
             }
             
             // Carousel interaction zone (adjusted)
-            beginShape();
-            fill(255, 255, 0, 150);
-            vertex(515, 740);
-            vertex(730, 740);
-            vertex(750, 934);
-            vertex(550, 961);
-            endShape(CLOSE);
-            if (mouseX > 515 && mouseX < 730 && mouseY > 740 && mouseY < 961) {
-                if (isPointInPolygon(mouseX, mouseY, [[515, 740], [730, 740], [750, 934], [550, 961]])) {
-                    displayZoneName('Carousel');
-                }
+            if (isPointInPolygon(mouseX, mouseY, [[515, 740], [730, 740], [750, 934], [550, 961]])) {
+                fill(255, 255, 0, 150);
+                beginShape();
+                vertex(515, 740);
+                vertex(730, 740);
+                vertex(750, 934);
+                vertex(550, 961);
+                endShape(CLOSE);
+                displayZoneName('Carousel');
             }
             
             // Restaurant interaction zone
@@ -84,3 +82,25 @@
             fill(0);
             textSize(36);
             text(`X: ${mouseX}, Y: ${mouseY}`, mouseX + 15, mouseY + 15);
+        }
+
+        function displayZoneName(zoneName) {
+            fill(0);
+            textSize(64);
+            textAlign(CENTER, CENTER);
+            text(zoneName, width / 2, height / 2);
+        }
+
+        function isPointInPolygon(x, y, vertices) {
+            let inside = false;
+            for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+                let xi = vertices[i][0], yi = vertices[i][1];
+                let xj = vertices[j][0], yj = vertices[j][1];
+                let intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                if (intersect) inside = !inside;
+            }
+            return inside;
+        }
+    </script>
+</body>
+</html>
