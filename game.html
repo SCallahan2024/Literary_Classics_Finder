@@ -19,6 +19,7 @@
 <body>
     <script>
         let bg;
+        let message = '';
 
         function preload() {
             bg = loadImage('theme-park.png');
@@ -71,6 +72,14 @@
                 rect(800, 750, 150, 150);
                 displayZoneName('Restaurant');
             }
+
+            // Display message if set
+            if (message) {
+                fill(0);
+                textSize(32);
+                textAlign(CENTER, CENTER);
+                text(message, width / 2, height - 50);
+            }
         }
 
         function displayCoordinates() {
@@ -84,6 +93,31 @@
             textSize(64);
             textAlign(CENTER, CENTER);
             text(zoneName, width / 2, height / 2);
+        }
+
+        function mousePressed() {
+            // Primary castle interaction
+            if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
+                message = 'The castle invites you to spend a fun day at the amusement park.';
+            }
+            // Secondary castle interaction
+            else if (mouseX > 150 && mouseX < 300 && mouseY > 200 && mouseY < 450) {
+                message = 'Sentimental goodies a plenty await you in the souvenir shop.';
+            }
+            // Ferris wheel interaction
+            else if (mouseX > 700 && mouseX < 900 && mouseY > 150 && mouseY < 450) {
+                message = 'The Ferris wheel allows riders to reach new heights.';
+            }
+            // Carousel interaction
+            else if (mouseX > 520 && mouseX < 750 && mouseY > 730 && mouseY < 950) {
+                message = 'The carousel spins whimsical nostalgia for adults and new adventure for kids.';
+            }
+            // Restaurant interaction
+            else if (mouseX > 800 && mouseX < 950 && mouseY > 750 && mouseY < 900) {
+                message = 'This culinary magic will satisfy every taste and appetite.';
+            } else {
+                message = '';
+            }
         }
     </script>
 </body>
