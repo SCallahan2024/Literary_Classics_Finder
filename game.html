@@ -33,6 +33,45 @@
             background(bg);
             fill(0, 102, 204);
             ellipse(mouseX, mouseY, 50, 50);
+            
+            // Primary castle interaction zone
+            if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
+                fill(255, 0, 0, 150);
+                rect(400, 150, 200, 300);
+            }
+            
+            // Secondary castle interaction zone
+            if (mouseX > 150 && mouseX < 300 && mouseY > 200 && mouseY < 450) {
+                fill(0, 255, 0, 150);
+                rect(150, 200, 150, 250);
+            }
+            
+            // Ferris wheel interaction zone
+            if (mouseX > 700 && mouseX < 900 && mouseY > 150 && mouseY < 450) {
+                fill(0, 0, 255, 150);
+                rect(700, 150, 200, 300);
+            }
+            
+            // Carousel interaction zone
+            if (mouseX > 350 && mouseX < 500 && mouseY > 650 && mouseY < 800) {
+                fill(255, 255, 0, 150);
+                rect(350, 650, 150, 150);
+            }
+            
+            // Restaurant interaction zone
+            if (mouseX > 800 && mouseX < 950 && mouseY > 750 && mouseY < 900) {
+                fill(255, 0, 255, 150);
+                rect(800, 750, 150, 150);
+            }
+
+            // Display mouse coordinates
+            displayCoordinates();
+        }
+
+        function displayCoordinates() {
+            fill(0);
+            textSize(16);
+            text(`X: ${mouseX}, Y: ${mouseY}`, 10, height - 10);
         }
     </script>
 </body>
