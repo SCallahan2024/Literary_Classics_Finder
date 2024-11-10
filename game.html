@@ -75,19 +75,19 @@
 
             // Display message if set
             if (message) {
-                fill(255, 0, 0);
-                stroke(255);
-                strokeWeight(4);
-                textSize(32);
-                textAlign(CENTER, TOP);
+                fill(255);
+                stroke(0);
+                strokeWeight(6);
+                textSize(28);
+                textAlign(LEFT, TOP);
                 textWrap(WORD);
-                text(message, width / 2 - 450, 20, 900);
+                text(message, 20, 20, width - 40);
             }
         }
 
         function displayCoordinates() {
             fill(0);
-            textSize(36);
+            textSize(20);
             text(`X: ${mouseX}, Y: ${mouseY}`, mouseX + 15, mouseY + 15);
         }
 
