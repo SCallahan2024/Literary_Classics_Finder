@@ -19,9 +19,13 @@
 <body>
     <script>
         let bg;
+        let bgLoaded = false;
 
         function preload() {
-            bg = loadImage('theme-park.png');
+            bg = loadImage('theme-park.png', 
+                () => { bgLoaded = true; }, 
+                () => { console.error('Failed to load theme-park.png'); }
+            );
         }
 
         function setup() {
@@ -30,7 +34,15 @@
         }
 
         function draw() {
-            background(bg);
+            if (bgLoaded) {
+                background(bg);
+            } else {
+                background(200); // Gray background if image fails to load
+                fill(0);
+                textSize(32);
+                textAlign(CENTER, CENTER);
+                text('Background image not loaded', width / 2, height / 2);
+            }
             fill(0, 102, 204);
             ellipse(mouseX, mouseY, 50, 50);
             
