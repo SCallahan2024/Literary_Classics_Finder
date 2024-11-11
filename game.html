@@ -46,11 +46,9 @@
         let budget = 200;
         let options = [];
 
-
         function preload() {
             bg = loadImage('theme-park.png');
         }
-
 
         function setup() {
             let canvas = createCanvas(1000, 1000);
@@ -58,50 +56,48 @@
             noLoop(); // No continuous draw loop; redraw only when needed
         }
 
-
         function draw() {
             background(bg);
             fill(0, 102, 204);
             ellipse(mouseX, mouseY, 50, 50);
-           
+            
             // Display mouse coordinates at the mouse position
             displayCoordinates();
-           
+            
             // Primary castle interaction zone
             if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
                 fill(255, 0, 0, 150);
                 rect(400, 150, 200, 300);
                 displayZoneName('Primary Castle');
             }
-           
+            
             // Secondary castle interaction zone
             if (mouseX > 150 && mouseX < 300 && mouseY > 200 && mouseY < 450) {
                 fill(0, 255, 0, 150);
                 rect(150, 200, 150, 250);
                 displayZoneName('Secondary Castle');
             }
-           
+            
             // Ferris wheel interaction zone
             if (mouseX > 700 && mouseX < 900 && mouseY > 150 && mouseY < 450) {
                 fill(0, 0, 255, 150);
                 rect(700, 150, 200, 300);
                 displayZoneName('Ferris Wheel');
             }
-           
+            
             // Carousel interaction zone (moved to bottom right)
             if (mouseX > 520 && mouseX < 750 && mouseY > 730 && mouseY < 950) {
                 fill(255, 255, 0, 150);
                 rect(600, 800, 200, 150);
                 displayZoneName('Carousel');
             }
-           
+            
             // Restaurant interaction zone
             if (mouseX > 800 && mouseX < 950 && mouseY > 750 && mouseY < 900) {
                 fill(255, 0, 255, 150);
                 rect(800, 750, 150, 150);
                 displayZoneName('Restaurant');
             }
-
 
             // Display message if set
             if (message) {
@@ -115,13 +111,11 @@
                 text(message, 40, 40, width - 80);
             }
 
-
             // Display budget in the corner
             fill(0);
             textSize(20);
             text(`Budget: $${budget}`, width - 150, 30);
         }
-
 
         function displayCoordinates() {
             fill(0);
@@ -129,14 +123,12 @@
             text(`X: ${mouseX}, Y: ${mouseY}`, mouseX + 15, mouseY + 15);
         }
 
-
         function displayZoneName(zoneName) {
             fill(0);
             textSize(64);
             textAlign(CENTER, CENTER);
             text(zoneName, width / 2, height / 2);
         }
-
 
         function mousePressed() {
             // Primary castle interaction
@@ -184,7 +176,6 @@
             }
         }
 
-
         function displayButtons() {
             const buttonContainer = document.getElementById('buttonContainer');
             buttonContainer.innerHTML = '';
@@ -201,17 +192,14 @@
             }
         }
 
-
         function clearButtons() {
             const buttonContainer = document.getElementById('buttonContainer');
             buttonContainer.innerHTML = '';
         }
 
-
         function adjustBudget(amount) {
             budget += amount;
         }
-
 
         function updateMessage(success) {
             if (success) {
