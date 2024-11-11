@@ -139,52 +139,57 @@
                     { text: 'No, maybe I will splurge next time.', action: () => { updateMessage(false); } }
                 ];
                 displayButtons();
+                redraw();
             }
             // Secondary castle interaction
             else if (mouseX > 150 && mouseX < 300 && mouseY > 200 && mouseY < 450) {
                 message = 'Sentimental goodies a plenty await you in the souvenir shop.';
                 options = [];
                 clearButtons();
+                redraw();
             }
             // Ferris wheel interaction
             else if (mouseX > 700 && mouseX < 900 && mouseY > 150 && mouseY < 450) {
                 message = 'The Ferris wheel allows riders to reach new heights.';
                 options = [];
                 clearButtons();
+                redraw();
             }
             // Carousel interaction
             else if (mouseX > 520 && mouseX < 750 && mouseY > 730 && mouseY < 950) {
                 message = 'The carousel spins whimsical nostalgia for adults and new adventure for kids.';
                 options = [];
                 clearButtons();
+                redraw();
             }
             // Restaurant interaction
             else if (mouseX > 800 && mouseX < 950 && mouseY > 750 && mouseY < 900) {
                 message = 'This culinary magic will satisfy every taste and appetite.';
                 options = [];
                 clearButtons();
+                redraw();
             } else {
                 message = '';
                 options = [];
                 clearButtons();
+                redraw();
             }
-            redraw();
         }
 
         function displayButtons() {
             const buttonContainer = document.getElementById('buttonContainer');
             buttonContainer.innerHTML = '';
-            for (let i = 0; i < options.length; i++) {
+            options.forEach(option => {
                 const button = document.createElement('button');
                 button.className = 'button';
-                button.innerText = options[i].text;
-                button.onclick = function() {
-                    options[i].action();
+                button.innerText = option.text;
+                button.onclick = () => {
+                    option.action();
                     clearButtons();
                     redraw();
                 };
                 buttonContainer.appendChild(button);
-            }
+            });
         }
 
         function clearButtons() {
