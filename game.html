@@ -51,8 +51,9 @@
         let gameEnded = false;
 
         function preload() {
-            bg = loadImage('theme-park.png');
-            endImage = loadImage('end.png');
+    console.log('Loading images...');
+            bg = loadImage('theme-park.png', () => console.log('Background image loaded successfully'), () => console.error('Failed to load background image'));
+            endImage = loadImage('end.png', () => console.log('End image loaded successfully'), () => console.error('Failed to load end image'));
         }
 
         function setup() {
@@ -62,6 +63,10 @@
         }
 
         function draw() {
+    if (!bg || !endImage) {
+        console.error('Images are not loaded properly');
+        return;
+    }
             if (gameEnded) {
                 displayEndScreen();
                 return;
@@ -249,6 +254,10 @@
         }
 
         function displayEndScreen() {
+    if (!endImage) {
+        console.error('End image is not loaded');
+        return;
+    }
             background(0);
             image(endImage, 0, 0, width, height);
         }
