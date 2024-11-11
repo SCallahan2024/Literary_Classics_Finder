@@ -51,6 +51,7 @@
         }
 
         function setup() {
+            noLoop();
             let canvas = createCanvas(1000, 1000);
             canvas.parent(document.body);
         }
@@ -134,8 +135,8 @@
             if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
                 message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou have $200 for incidentals to get your family of four (two adults and two children) through a day at the amusement park. Budget and spend wisely. Your first decision is whether or not to pay $35 for a special character photo as you enter through the central castle area.';
                 options = [
-                    { text: 'Yes, a pricey photo is a priceless memory!', action: () => { adjustBudget(-35); updateMessage(); } },
-                    { text: 'No, maybe I will splurge next time.', action: () => updateMessage() }
+                    { text: 'Yes, a pricey photo is a priceless memory!', action: () => { adjustBudget(-35); updateMessage(true); redraw(); } },
+                    { text: 'No, maybe I will splurge next time.', action: () => { updateMessage(false); redraw(); } }
                 ];
                 displayButtons();
             }
@@ -193,8 +194,12 @@
             budget += amount;
         }
 
-        function updateMessage() {
-            message = 'You now have $' + budget + ' left.';
+        function updateMessage(success) {
+            if (success) {
+                message = 'You chose to take the photo. You now have $' + budget + ' left.';
+            } else {
+                message = 'You chose not to take the photo. You still have $' + budget + ' left.';
+            }
         }
     </script>
 </body>
