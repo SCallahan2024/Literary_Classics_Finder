@@ -131,6 +131,12 @@
         }
 
         function mousePressed() {
+            // Prevent any interference if buttons are being interacted with
+            const buttonContainer = document.getElementById('buttonContainer');
+            if (document.activeElement && buttonContainer.contains(document.activeElement)) {
+                return;
+            }
+
             // Primary castle interaction
             if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
                 message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou have $200 for incidentals to get your family of four (two adults and two children) through a day at the amusement park. Budget and spend wisely. Your first decision is whether or not to pay $35 for a special character photo as you enter through the central castle area.';
@@ -184,6 +190,7 @@
                 button.className = 'button';
                 button.innerText = option.text;
                 button.addEventListener('click', () => {
+                    console.log('Button clicked: ' + option.text); // Debugging log
                     option.action();
                     clearButtons();
                     redraw();
@@ -198,6 +205,7 @@
         }
 
         function adjustBudget(amount) {
+            console.log('Adjusting budget by:', amount); // Debugging log
             budget += amount;
         }
 
@@ -207,6 +215,7 @@
             } else {
                 message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou chose not to take the photo. You still have $' + budget + ' left.';
             }
+            console.log('Updated message:', message); // Debugging log
             redraw();
         }
     </script>
