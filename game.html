@@ -135,11 +135,10 @@
             if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
                 message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou have $200 for incidentals to get your family of four (two adults and two children) through a day at the amusement park. Budget and spend wisely. Your first decision is whether or not to pay $35 for a special character photo as you enter through the central castle area.';
                 options = [
-                    { text: 'Yes, a pricey photo is a priceless memory!', action: () => { adjustBudget(-35); updateMessage(true); } },
-                    { text: 'No, maybe I will splurge next time.', action: () => { updateMessage(false); } }
+                    { text: 'Yes, a pricey photo is a priceless memory!', action: () => { adjustBudget(-35); updateMessage(true); redraw(); } },
+                    { text: 'No, maybe I will splurge next time.', action: () => { updateMessage(false); redraw(); } }
                 ];
                 displayButtons();
-                redraw();
             }
             // Secondary castle interaction
             else if (mouseX > 150 && mouseX < 300 && mouseY > 200 && mouseY < 450) {
@@ -183,10 +182,9 @@
                 const button = document.createElement('button');
                 button.className = 'button';
                 button.innerText = options[i].text;
-                button.onclick = () => {
+                button.onclick = function() {
                     options[i].action();
                     clearButtons();
-                    requestAnimationFrame(redraw); // Use requestAnimationFrame for smoother update
                 };
                 buttonContainer.appendChild(button);
             }
@@ -207,7 +205,7 @@
             } else {
                 message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou chose not to take the photo. You still have $' + budget + ' left.';
             }
-            requestAnimationFrame(redraw); // Use requestAnimationFrame for smoother update
+            redraw();
         }
     </script>
 </body>
