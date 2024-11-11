@@ -53,6 +53,7 @@
         function setup() {
             let canvas = createCanvas(1000, 1000);
             canvas.parent(document.body);
+            noLoop(); // No continuous draw loop; redraw only when needed
         }
 
         function draw() {
@@ -102,7 +103,7 @@
             if (message) {
                 fill(50, 50, 50, 200);
                 noStroke();
-                rect(20, 20, width - 40, 140, 10);
+                rect(20, 20, width - 40, 160, 10);
                 fill(255);
                 textSize(20);
                 textAlign(LEFT, TOP);
@@ -134,8 +135,8 @@
             if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
                 message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou have $200 for incidentals to get your family of four (two adults and two children) through a day at the amusement park. Budget and spend wisely. Your first decision is whether or not to pay $35 for a special character photo as you enter through the central castle area.';
                 options = [
-                    { text: 'Yes, a pricey photo is a priceless memory!', action: () => { adjustBudget(-35); updateMessage(true); loop(); } },
-                    { text: 'No, maybe I will splurge next time.', action: () => { updateMessage(false); loop(); } }
+                    { text: 'Yes, a pricey photo is a priceless memory!', action: () => { adjustBudget(-35); updateMessage(true); redraw(); } },
+                    { text: 'No, maybe I will splurge next time.', action: () => { updateMessage(false); redraw(); } }
                 ];
                 displayButtons();
             }
@@ -144,33 +145,33 @@
                 message = 'Sentimental goodies a plenty await you in the souvenir shop.';
                 options = [];
                 clearButtons();
-                loop();
+                redraw();
             }
             // Ferris wheel interaction
             else if (mouseX > 700 && mouseX < 900 && mouseY > 150 && mouseY < 450) {
                 message = 'The Ferris wheel allows riders to reach new heights.';
                 options = [];
                 clearButtons();
-                loop();
+                redraw();
             }
             // Carousel interaction
             else if (mouseX > 520 && mouseX < 750 && mouseY > 730 && mouseY < 950) {
                 message = 'The carousel spins whimsical nostalgia for adults and new adventure for kids.';
                 options = [];
                 clearButtons();
-                loop();
+                redraw();
             }
             // Restaurant interaction
             else if (mouseX > 800 && mouseX < 950 && mouseY > 750 && mouseY < 900) {
                 message = 'This culinary magic will satisfy every taste and appetite.';
                 options = [];
                 clearButtons();
-                loop();
+                redraw();
             } else {
                 message = '';
                 options = [];
                 clearButtons();
-                loop();
+                redraw();
             }
         }
 
@@ -184,7 +185,6 @@
                 button.onclick = () => {
                     options[i].action();
                     clearButtons();
-                    noLoop();
                 };
                 buttonContainer.appendChild(button);
             }
@@ -201,10 +201,11 @@
 
         function updateMessage(success) {
             if (success) {
-                message = 'You chose to take the photo. You now have $' + budget + ' left.';
+                message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou chose to take the photo. You now have $' + budget + ' left.';
             } else {
-                message = 'You chose not to take the photo. You still have $' + budget + ' left.';
+                message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou chose not to take the photo. You still have $' + budget + ' left.';
             }
+            redraw();
         }
     </script>
 </body>
