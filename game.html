@@ -58,7 +58,7 @@
     let canvas = createCanvas(1000, 1000);
     canvas.parent(document.body);
     noLoop();
-    endImage = loadImage('end.png'); // No continuous draw loop; redraw only when needed
+    // Removed redundant endImage load; No continuous draw loop; redraw only when needed
         }
 
         function draw() {
@@ -249,6 +249,7 @@
         }
 
         function displayEndScreen() {
+    background(0);
     image(endImage, 0, 0, width, height);
 }
         }
