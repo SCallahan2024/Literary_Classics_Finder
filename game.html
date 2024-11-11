@@ -42,6 +42,7 @@
     <div id="buttonContainer" class="button-container"></div>
     <script>
         let bg;
+        let endImage;
         let message = '';
         let budget = 200;
         let options = [];
@@ -50,18 +51,22 @@
         let gameEnded = false;
 
         function preload() {
-    bg = loadImage('theme-park.png');
-    endImage = loadImage('end.png');
-}
+            bg = loadImage('theme-park.png');
+            endImage = loadImage('end.png');
+        }
 
         function setup() {
-    let canvas = createCanvas(1000, 1000);
-    canvas.parent(document.body);
-    noLoop();
-    // Removed redundant endImage load; No continuous draw loop; redraw only when needed
+            let canvas = createCanvas(1000, 1000);
+            canvas.parent(document.body);
+            noLoop(); // No continuous draw loop; redraw only when needed
         }
 
         function draw() {
+            if (gameEnded) {
+                displayEndScreen();
+                return;
+            }
+
             background(bg);
             fill(0, 102, 204);
             ellipse(mouseX, mouseY, 50, 50);
@@ -69,11 +74,6 @@
             // Display mouse coordinates at the mouse position
             displayCoordinates();
             
-            if (gameEnded) {
-                displayEndScreen();
-                return;
-            }
-
             // Primary castle interaction zone
             if (mouseX > 400 && mouseX < 600 && mouseY > 150 && mouseY < 450) {
                 fill(255, 0, 0, 150);
@@ -249,9 +249,8 @@
         }
 
         function displayEndScreen() {
-    background(0);
-    image(endImage, 0, 0, width, height);
-}
+            background(0);
+            image(endImage, 0, 0, width, height);
         }
     </script>
 </body>
