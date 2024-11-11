@@ -50,6 +50,9 @@
         let gameEnded = false;
 
         function preload() {
+    bg = loadImage('theme-park.png');
+    endImage = loadImage('end.png');
+    endImage = loadImage('end.png');
             bg = loadImage('theme-park.png');
         }
 
@@ -247,16 +250,8 @@
         }
 
         function displayEndScreen() {
-            background(0);
-            fill(255, 204, 0);
-            textSize(64);
-            textAlign(CENTER, CENTER);
-            text('Game Over', width / 2, height / 2);
-            // Fireworks effect (simple representation)
-            for (let i = 0; i < 100; i++) {
-                fill(random(255), random(255), random(255));
-                ellipse(random(width), random(height), random(10, 30));
-            }
+    image(endImage, 0, 0, width, height);
+}
         }
     </script>
 </body>
