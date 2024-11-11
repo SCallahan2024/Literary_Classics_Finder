@@ -183,11 +183,11 @@
                 const button = document.createElement('button');
                 button.className = 'button';
                 button.innerText = option.text;
-                button.onclick = () => {
+                button.addEventListener('click', () => {
                     option.action();
                     clearButtons();
                     redraw();
-                };
+                });
                 buttonContainer.appendChild(button);
             });
         }
