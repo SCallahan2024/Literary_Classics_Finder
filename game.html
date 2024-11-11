@@ -186,7 +186,7 @@
                 button.onclick = () => {
                     options[i].action();
                     clearButtons();
-                    redraw();
+                    requestAnimationFrame(redraw); // Use requestAnimationFrame for smoother update
                 };
                 buttonContainer.appendChild(button);
             }
@@ -207,7 +207,7 @@
             } else {
                 message = 'The castle invites you to spend a fun day at the amusement park.\n\nYou chose not to take the photo. You still have $' + budget + ' left.';
             }
-            redraw();
+            requestAnimationFrame(redraw); // Use requestAnimationFrame for smoother update
         }
     </script>
 </body>
