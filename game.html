@@ -52,14 +52,13 @@
         function preload() {
     bg = loadImage('theme-park.png');
     endImage = loadImage('end.png');
-    endImage = loadImage('end.png');
-            bg = loadImage('theme-park.png');
-        }
+}
 
         function setup() {
-            let canvas = createCanvas(1000, 1000);
-            canvas.parent(document.body);
-            noLoop(); // No continuous draw loop; redraw only when needed
+    let canvas = createCanvas(1000, 1000);
+    canvas.parent(document.body);
+    noLoop();
+    endImage = loadImage('end.png'); // No continuous draw loop; redraw only when needed
         }
 
         function draw() {
