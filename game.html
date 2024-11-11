@@ -40,6 +40,7 @@
 </head>
 <body>
     <div id="buttonContainer" class="button-container"></div>
+    <div id="canvasContainer"></div>
     <script>
         let bg;
         let endImage;
@@ -49,24 +50,39 @@
         let interactionCount = 0;
         const totalInteractions = 5;
         let gameEnded = false;
+        let imagesLoaded = false;
 
         function preload() {
-    console.log('Loading images...');
-            bg = loadImage('theme-park.png', () => console.log('Background image loaded successfully'), () => console.error('Failed to load background image'));
-            endImage = loadImage('end.png', () => console.log('End image loaded successfully'), () => console.error('Failed to load end image'));
+            console.log('Loading images...');
+            bg = loadImage('theme-park.png', () => {
+                console.log('Background image loaded successfully');
+                checkImagesLoaded();
+            }, () => console.error('Failed to load background image'));
+            endImage = loadImage('end.png', () => {
+                console.log('End image loaded successfully');
+                checkImagesLoaded();
+            }, () => console.error('Failed to load end image'));
+        }
+
+        function checkImagesLoaded() {
+            if (bg && endImage) {
+                imagesLoaded = true;
+                redraw();
+            }
         }
 
         function setup() {
             let canvas = createCanvas(1000, 1000);
-            canvas.parent(document.body);
+            canvas.parent('canvasContainer');
             noLoop(); // No continuous draw loop; redraw only when needed
         }
 
         function draw() {
-    if (!bg || !endImage) {
-        console.error('Images are not loaded properly');
-        return;
-    }
+            if (!imagesLoaded) {
+                console.error('Images are not loaded properly');
+                return;
+            }
+
             if (gameEnded) {
                 displayEndScreen();
                 return;
@@ -254,10 +270,6 @@
         }
 
         function displayEndScreen() {
-    if (!endImage) {
-        console.error('End image is not loaded');
-        return;
-    }
             background(0);
             image(endImage, 0, 0, width, height);
         }
